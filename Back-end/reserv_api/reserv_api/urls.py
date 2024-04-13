@@ -23,7 +23,8 @@ from reserv_back import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('rooms/', RoomList.as_view(), name='room_list'),
+   path('rooms/<int:pk>/', views.RoomUpdate.as_view(), name='room_list'),
+    path('rooms/', views.RoomList.as_view(), name='room_list'),
     path('signup/', Signup.as_view(), name='signup'),
     path('login/', views.Login.as_view(), name='login'),
     path('add-room/', views.AddRoomView.as_view(), name='add_room'),

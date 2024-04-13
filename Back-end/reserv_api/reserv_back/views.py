@@ -13,9 +13,32 @@ from django.http import JsonResponse
 
 
 
-class RoomList(generics.ListAPIView):
-    queryset = Room.objects.all()
+class RoomList(APIView):
     serializer_class = RoomSerializer
+    
+    def get(self, request):
+        queryset = Room.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+    
+   
+    
+class RoomUpdate(APIView):
+    serializer_class = RoomSerializer
+    def delete(self, request, pk):
+        room = get_object_or_404(Room, pk=pk)
+        room.delete()
+        return Response({'message': 'Room deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
+    def put(self, request, pk):
+        room = get_object_or_404(Room, pk=pk)
+        serializer = RoomSerializer(room, data=request.data)
+        print(request.data)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Signup(generics.CreateAPIView):
